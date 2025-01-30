@@ -6,7 +6,7 @@ services:
     volumes:
       - exp-keycloak-db:/var/lib/postgresql/data
     ports:
-      - 20002:5432
+      - 20001:5432
     environment:
       POSTGRES_DB: keycloakdb
       POSTGRES_USER: ${POSTGRES_USER:-keycloak_user}
