@@ -1,30 +1,30 @@
 services:
-  keycloak-db:
-    container_name: keycloak-db
+  exp-keycloak-db:
+    container_name: exp-keycloak-db
     image: postgres:17.0
     restart: always
     volumes:
-      - keycloak:/var/lib/postgresql/data
-      - ./exports:/exports
+      - exp-keycloak-db:/var/lib/postgresql/data
     ports:
-      - 5432:5432
+      - 20002:5432
     environment:
       POSTGRES_DB: keycloakdb
       POSTGRES_USER: ${POSTGRES_USER:-keycloak_user}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-P@ssw0rd}
 
-  keycloak-app:
+  exp-keycloak-app:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: keycloak-app
+    container_name: exp-keycloak-app
     restart: always
-    command:
-      - start
+    command: ["start-dev", "--import-realm"]
+    volumes:
+      - ./config:/opt/keycloak/data/import:ro
     ports:
-      - 8081:8080
+      - 10001:8080
     depends_on:
-      - keycloak-db
+      - exp-keycloak-db
     working_dir: /opt/keycloak
     environment:
       # Keycloak 管理コンソール
@@ -35,7 +35,7 @@ services:
       # データベース名
       KC_DB_URL_DATABASE: keycloakdb
       # 接続情報
-      KC_DB_URL_HOST: keycloak-db
+      KC_DB_URL_HOST: exp-keycloak-db
       KC_DB_URL_PORT: 5432
       KC_DB_USERNAME: ${POSTGRES_USER:-keycloak_user}
       KC_DB_PASSWORD: ${POSTGRES_PASSWORD:-P@ssw0rd}
@@ -58,5 +58,5 @@ services:
       PROXY_ADDRESS_FORWARDING: true
 
 volumes:
-  keycloak:
+  exp-keycloak-db:
     driver: local
