@@ -1,0 +1,105 @@
+{
+  "info": {
+    "_postman_id": "6b407709-6f9e-423f-a230-195361453c72",
+    "name": "keycloak",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "18005625"
+  },
+  "item": [
+    {
+      "name": "Access Token",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "grant_type",
+              "value": "client_credentials",
+              "type": "text"
+            },
+            {
+              "key": "client_id",
+              "value": "admin-cli",
+              "type": "text"
+            },
+            {
+              "key": "client_secret",
+              "value": "DUMMY_CLIENT_SECRET",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{accessToken}}",
+          "host": ["{{accessToken}}"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "/users",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "DUMMY_ACCESS_TOKEN",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{adminApi}}/users",
+          "host": ["{{adminApi}}"],
+          "path": ["users"]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "exec": [""]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "realm",
+      "value": "fts-experimental",
+      "type": "string"
+    },
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:10001",
+      "type": "string"
+    },
+    {
+      "key": "accessToken",
+      "value": "{{baseUrl}}/realms/{{realm}}/protocol/openid-connect/token",
+      "type": "string"
+    },
+    {
+      "key": "adminApi",
+      "value": "{{baseUrl}}/admin/realms/{{realm}}",
+      "type": "string"
+    }
+  ]
+}
