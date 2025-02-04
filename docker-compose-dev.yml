@@ -1,3 +1,11 @@
+volumes:
+  exp-keycloak-db:
+    driver: local
+
+networks:
+  fts-experimental:
+    external: true
+
 services:
   exp-keycloak-db:
     container_name: exp-keycloak-db
@@ -11,6 +19,8 @@ services:
       POSTGRES_DB: keycloakdb
       POSTGRES_USER: ${POSTGRES_USER:-keycloak_user}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-P@ssw0rd}
+    networks:
+      - fts-experimental
 
   exp-keycloak-app:
     build:
@@ -56,7 +66,5 @@ services:
       # see https://www.keycloak.org/server/features#_supported_features
       KC_FEATURES: token-exchange
       PROXY_ADDRESS_FORWARDING: true
-
-volumes:
-  exp-keycloak-db:
-    driver: local
+    networks:
+      - fts-experimental
